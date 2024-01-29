@@ -7,3 +7,8 @@ API de autenticação com banco de dados
 3 - `db.session` = objeto de sessão do banco de dados
 4 - `db.session.commit()` = executa as operações no banco de dados
 
+### Criar objeto com SQLAlchemy
+1 - `user = User(username="admin", password="123")`
+2 - `db.session.add(user)`
+3 - `db.session.commit()`
+
