@@ -63,6 +63,15 @@ def read_user(user_id):
     
     return jsonify({"message": "Usuário não encontrado"}), 404
 
+@app.route('/user', methods=['GET'])
+def list_users():
+    users = User.query.all()
+    list_users = []
+    for user in users:
+        list_users.append({"username": user.username, "id": user.id})
+
+    return jsonify({"users": list_users})
+
 @app.route('/user/<int:user_id>', methods=['PUT'])
 @login_required
 def update_user(user_id):
@@ -72,6 +81,21 @@ def update_user(user_id):
         user.password = data.get('password')
         db.session.commit()
         return jsonify({"message": f"Usuário {user_id} atualizado com sucesso"})
+    
+    return jsonify({"message": "Usuário não encontrado"}), 404
+
+@app.route('/user/<int:user_id>', methods=['DELETE'])
+@login_required
+def delete_user(user_id):
+    user = User.query.get(user_id)
+
+    if  user_id == current_user.id:
+        return jsonify({"message": "Remoção não permitida"}), 403
+
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": f"Usuário {user_id} removido com sucesso"})
     
     return jsonify({"message": "Usuário não encontrado"}), 404
 
